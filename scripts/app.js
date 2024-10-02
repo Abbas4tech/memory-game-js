@@ -12,7 +12,7 @@ const flipCard = (id) => {
     setTimeout(() => {
       clickedCard.classList.remove(CLICKED_CLASS);
       cardIsClicked = false;
-    }, 1000);
+    }, 500);
     setTimeout(() => (clickedCard.style.pointerEvents = "auto"), 3000);
   }
 };

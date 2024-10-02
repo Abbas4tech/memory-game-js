@@ -17,8 +17,8 @@ main {
 
   header {
     height: 5rem;
-    background-color: steelblue;
-    color: azure;
+    background-color: #1b4332;
+    color: #d8f3dc;
     display: flex;
     justify-content: center;
     align-items: center;

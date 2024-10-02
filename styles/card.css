@@ -38,13 +38,13 @@
 }
 
 .flip-card-front {
-  background-color: #2980b9;
-  color: white;
+  background-color: #40916c;
+  color: #d8f3dc;
 }
 
 .flip-card-back {
-  background-color: #9f4b42;
-  color: white;
+  background-color: #74c69d;
+  color: #d8f3dc;
   transform: rotateY(180deg);
   .flipped & {
     transform: rotate(0);
