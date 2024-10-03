@@ -18,7 +18,7 @@
   transform-style: preserve-3d;
 }
 
-.flip-card.clicked:not(.flipped) .flip-card-inner {
+.flip-card.clicked .flip-card-inner {
   transform: rotateY(180deg);
 }
 

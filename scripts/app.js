@@ -1,26 +1,67 @@
 import { cards, CLICKED_CLASS } from "./cards.js";
 
 const GridContainer = document.getElementById("cards");
-let cardIsClicked = false;
+let firstCardSelected = false;
+let secondCardSelected = false;
+let combinations = [];
+const showCardsFor = 500;
 
-const flipCard = (id) => {
-  if (!cardIsClicked) {
-    cardIsClicked = true;
-    const clickedCard = document.getElementById(id);
-    clickedCard.classList.add(CLICKED_CLASS);
-    clickedCard.style.pointerEvents = "none";
-    setTimeout(() => {
-      clickedCard.classList.remove(CLICKED_CLASS);
-      cardIsClicked = false;
-    }, 500);
-    setTimeout(() => (clickedCard.style.pointerEvents = "auto"), 3000);
-  }
+const selectFirstCard = (id) => {
+  const clickedCard = document.getElementById(id);
+  clickedCard.classList.add(CLICKED_CLASS);
+  clickedCard.style.pointerEvents = "none";
+  combinations.push(id);
+  firstCardSelected = true;
 };
+
+const selectSecondCard = (id) => {
+  console.log("Ran", id);
+  const clickedCard = document.getElementById(id);
+  clickedCard.classList.add(CLICKED_CLASS);
+  clickedCard.style.pointerEvents = "none";
+  combinations.push(id);
+  secondCardSelected = true;
+};
+
+const checkIfCombinationMatch = () => {
+  const [firstCard, secondCard] = combinations;
+  return (
+    cards.find((card) => card.id === +firstCard).value ===
+    cards.find((e) => e.id === +secondCard).value
+  );
+};
+
+function cardClickHandler() {
+  if (!firstCardSelected) {
+    selectFirstCard(this.id);
+    return;
+  } else {
+    selectSecondCard(this.id);
+    const isMatched = checkIfCombinationMatch();
+    if (isMatched) {
+      combinations = [];
+      firstCardSelected = false;
+      secondCardSelected = false;
+    } else {
+      console.log(combinations);
+      combinations.forEach((card) => {
+        const el = document.getElementById(card);
+        setTimeout(() => {
+          el.classList.remove(CLICKED_CLASS);
+        }, showCardsFor);
+        el.style.pointerEvents = "auto";
+      });
+      firstCardSelected = false;
+      secondCardSelected = false;
+      combinations = [];
+    }
+  }
+}
 
 const renderCards = () => {
   cards.forEach((card) => {
     const cardEl = document.createElement("div");
-    cardEl.id = `card-${card.id}`;
+    cardEl.id = card.id;
     cardEl.classList.add("flip-card");
     cardEl.innerHTML = `
         <div class="flip-card-inner">
@@ -32,9 +73,8 @@ const renderCards = () => {
           </div>
         </div>
     `;
-    cardEl.addEventListener("click", () => flipCard(cardEl.id));
+    cardEl.addEventListener("click", cardClickHandler);
     GridContainer.append(cardEl);
   });
 };
 renderCards();
-console.log(cards);
