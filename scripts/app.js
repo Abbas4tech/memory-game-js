@@ -1,64 +1,53 @@
 import { cards, CLICKED_CLASS } from "./cards.js";
 
 const GridContainer = document.getElementById("cards");
-let firstCardSelected = false;
-let secondCardSelected = false;
-let combinations = [];
+let selectedCards = [];
 const showCardsFor = 500;
 
-const selectFirstCard = (id) => {
-  const clickedCard = document.getElementById(id);
-  clickedCard.classList.add(CLICKED_CLASS);
-  clickedCard.style.pointerEvents = "none";
-  combinations.push(id);
-  firstCardSelected = true;
+const selectCard = (cardEl, cardId) => {
+  cardEl.classList.add(CLICKED_CLASS);
+  cardEl.style.pointerEvents = "none";
+  selectedCards.push(cardId);
 };
 
-const selectSecondCard = (id) => {
-  console.log("Ran", id);
-  const clickedCard = document.getElementById(id);
-  clickedCard.classList.add(CLICKED_CLASS);
-  clickedCard.style.pointerEvents = "none";
-  combinations.push(id);
-  secondCardSelected = true;
+const resetCards = () => {
+  selectedCards.forEach((cardId) => {
+    const cardEl = document.getElementById(cardId);
+    setTimeout(() => {
+      cardEl.classList.remove(CLICKED_CLASS);
+      cardEl.style.pointerEvents = "auto";
+    }, showCardsFor);
+  });
+  selectedCards = [];
 };
 
 const checkIfCombinationMatch = () => {
-  const [firstCard, secondCard] = combinations;
+  const [firstCard, secondCard] = selectedCards;
   return (
     cards.find((card) => card.id === +firstCard).value ===
-    cards.find((e) => e.id === +secondCard).value
+    cards.find((card) => card.id === +secondCard).value
   );
 };
 
-function cardClickHandler() {
-  if (!firstCardSelected) {
-    selectFirstCard(this.id);
-    return;
-  } else {
-    selectSecondCard(this.id);
+const cardClickHandler = (e) => {
+  const clickedCard = e.target.closest(".flip-card");
+  if (!clickedCard || selectedCards.length === 2) return;
+
+  const cardId = clickedCard.id;
+  selectCard(clickedCard, cardId);
+
+  if (selectedCards.length === 2) {
     const isMatched = checkIfCombinationMatch();
-    if (isMatched) {
-      combinations = [];
-      firstCardSelected = false;
-      secondCardSelected = false;
+    if (!isMatched) {
+      resetCards();
     } else {
-      console.log(combinations);
-      combinations.forEach((card) => {
-        const el = document.getElementById(card);
-        setTimeout(() => {
-          el.classList.remove(CLICKED_CLASS);
-        }, showCardsFor);
-        el.style.pointerEvents = "auto";
-      });
-      firstCardSelected = false;
-      secondCardSelected = false;
-      combinations = [];
+      selectedCards = [];
     }
   }
-}
+};
 
 const renderCards = () => {
+  const fragment = document.createDocumentFragment();
   cards.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.id = card.id;
@@ -73,8 +62,10 @@ const renderCards = () => {
           </div>
         </div>
     `;
-    cardEl.addEventListener("click", cardClickHandler);
-    GridContainer.append(cardEl);
+    fragment.appendChild(cardEl);
   });
+  GridContainer.appendChild(fragment);
 };
+
+GridContainer.addEventListener("click", cardClickHandler);
 renderCards();
