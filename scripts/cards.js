@@ -84,5 +84,12 @@ export const cards = [
   .sort((a, b) => a.sort_key - b.sort_key)
   .map(({ card }) => card);
 
+export const shuffleCards = (cardsData) => {
+  return cardsData
+    .map((card) => ({ card, sort_key: Math.random() }))
+    .sort((a, b) => a.sort_key - b.sort_key)
+    .map(({ card }) => card);
+};
+
 export const FLIP_CLASS = "flipped";
 export const CLICKED_CLASS = "clicked";

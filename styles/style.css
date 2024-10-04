@@ -20,8 +20,24 @@ main {
     background-color: #1b4332;
     color: #d8f3dc;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 1rem;
     align-items: center;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    background-color: #40916c;
+    color: #d8f3dc;
+    border-radius: 0.25rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    &:hover {
+      background-color: #74c69d;
+    }
   }
 }
 

@@ -1,6 +1,7 @@
-import { cards, CLICKED_CLASS } from "./cards.js";
+import { cards, CLICKED_CLASS, shuffleCards } from "./cards.js";
 
 const GridContainer = document.getElementById("cards");
+const resetBtn = document.getElementById("reset-btn");
 let selectedCards = [];
 const showCardsFor = 500;
 
@@ -46,9 +47,10 @@ const cardClickHandler = (e) => {
   }
 };
 
-const renderCards = () => {
+const renderCards = (cardData) => {
+  GridContainer.innerHTML = "";
   const fragment = document.createDocumentFragment();
-  cards.forEach((card) => {
+  cardData.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.id = card.id;
     cardEl.classList.add("flip-card");
@@ -68,4 +70,5 @@ const renderCards = () => {
 };
 
 GridContainer.addEventListener("click", cardClickHandler);
-renderCards();
+resetBtn.addEventListener("click", () => renderCards(shuffleCards(cards)));
+renderCards(shuffleCards(cards));
