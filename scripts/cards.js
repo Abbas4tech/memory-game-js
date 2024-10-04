@@ -79,10 +79,7 @@ export const cards = [
     value: 8,
     unflippedValue: "?",
   },
-]
-  .map((card) => ({ card, sort_key: Math.random() }))
-  .sort((a, b) => a.sort_key - b.sort_key)
-  .map(({ card }) => card);
+];
 
 export const shuffleCards = (cardsData) => {
   return cardsData
